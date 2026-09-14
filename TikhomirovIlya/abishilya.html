@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портфолио ВТиПО</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --card-bg: #111827;
+            --border: #1f293d;
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-content {
+            display: none;
+        }
+
+        .profile-content.active {
+            display: block;
+        }
+
+        .header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .info-card label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .info-card span {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-hover);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .footer-btn {
+            display: inline-block;
+            margin-top: 12px;
+            width: 100%;
+            text-align: center;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .footer-btn:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Переключатель между тобой и Абишем -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchProfile('ilya')">Илья Тихомиров</button>
+        <button class="tab-btn" onclick="switchProfile('abish')">Унгарсынов Абиш</button>
+    </div>
+
+    <div class="container">
+        <!-- Твоя карточка -->
+        <div id="ilya" class="profile-content active">
+            <div class="header">
+                <div class="name">Тихомиров Илья Витальевич</div>
+                <div class="subtitle">Студент специальности ВТиПО</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Основная информация</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <label>Учебное заведение</label>
+                        <span>Astana International University</span>
+                    </div>
+                    <div class="info-card">
+                        <label>Специальность</label>
+                        <span>Вычислительная техника и ПО</span>
+                    </div>
+                    <div class="info-card">
+                        <label>Город</label>
+                        <span>Астана, Казахстан</span>
+                    </div>
+                    <div class="info-card">
+                        <label>Практика</label>
+                        <span>Системный администратор (НАО «Правительство для граждан»)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Стек и навыки</div>
+                <div class="skills">
+                    <span class="tag">Системное администрирование</span>
+                    <span class="tag">Сети (OSI, OSPF, VLAN)</span>
+                    <span class="tag">SQL / MS SQL Server</span>
+                    <span class="tag">Python / Pandas</span>
+                    <span class="tag">Git & GitHub</span>
+                    <span class="tag">Windows / Linux / macOS</span>
+                </div>
+            </div>
+
+            <a href="https://github.com/Zover39" target="_blank" class="footer-btn">Профиль на GitHub</a>
+        </div>
+
+        <!-- Карточка Абиша -->
+        <div id="abish" class="profile-content">
+            <div class="header">
+                <div class="name">Унгарсынов Абиш</div>
+                <div class="subtitle">Студент специальности ВТиПО</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Основная информация</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <label>Учебное заведение</label>
+                        <span>Astana International University</span>
+                    </div>
+                    <div class="info-card">
+                        <label>Специальность</label>
+                        <span>Вычислительная техника и ПО</span>
+                    </div>
+                    <div class="info-card">
+                        <label>Город</label>
+                        <span>Астана, Казахстан</span>
+                    </div>
+                    <div class="info-card">
+                        <label>Группа</label>
+                        <span>ВТиПО</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Стек и навыки</div>
+                <div class="skills">
+                    <span class="tag">Разработка ПО</span>
+                    <span class="tag">Базы данных</span>
+                    <span class="tag">Java / C++</span>
+                    <span class="tag">HTML / CSS</span>
+                    <span class="tag">Git & GitHub</span>
+                </div>
+            </div>
+
+            <a href="https://github.com" target="_blank" class="footer-btn">Профиль на GitHub</a>
+        </div>
+    </div>
+
+    <script>
+        function switchProfile(profileId) {
+            document.querySelectorAll('.profile-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(profileId).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+
+</body>
+
+</html>
