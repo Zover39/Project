@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Группа ВТиПО-24Б | Профили учащихся</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Навигация (Кнопки переключения) */
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 8px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: #0f172a;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Контейнер карточек */
+        .cards-container {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .user-card {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .user-card.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .avatar-wrapper {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--accent-color), #818cf8);
+            box-shadow: 0 8px 20px rgba(56, 189, 248, 0.25);
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            background-color: #334155;
+        }
+
+        .user-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .user-card .group-tag {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .info-list {
+            text-align: left;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Группа ВТиПО-24Б</h1>
+        <p>Студенческий портал учащихся</p>
+    </header>
+
+    <!-- Навигация -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchUser('user1', this)">Тихомиров Илья</button>
+        <button class="tab-btn" onclick="switchUser('user2', this)">Унгарсынов Абиш</button>
+        <button class="tab-btn" onclick="switchUser('user3', this)">Хаиргельдин Данекер</button>
+    </div>
+
+    <!-- Контейнер с карточками -->
+    <div class="cards-container">
+        
+        <!-- Пользователь 1 -->
+        <div id="user1" class="user-card active">
+            <div class="avatar-wrapper">
+                <img src="tikhomirov.jpg" alt="Тихомиров Илья" onerror="this.src='https://via.placeholder.com/160/1e293b/38bdf8?text=Фото+Ильи'">
+            </div>
+            <h2>Тихомиров Илья</h2>
+            <span class="group-tag">Группа ВТиПО-24Б</span>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label">Статус:</span>
+                    <span class="info-value">Учащийся</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Специальность:</span>
+                    <span class="info-value">ВТиПО</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Форма обучения:</span>
+                    <span class="info-value">Очная</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пользователь 2 -->
+        <div id="user2" class="user-card">
+            <div class="avatar-wrapper">
+                <img src="ungarsynov.jpg" alt="Унгарсынов Абиш" onerror="this.src='https://via.placeholder.com/160/1e293b/38bdf8?text=Фото+Абиша'">
+            </div>
+            <h2>Унгарсынов Абиш</h2>
+            <span class="group-tag">Группа ВТиПО-24Б</span>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label">Статус:</span>
+                    <span class="info-value">Учащийся</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Специальность:</span>
+                    <span class="info-value">ВТиПО</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Форма обучения:</span>
+                    <span class="info-value">Очная</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пользователь 3 -->
+        <div id="user3" class="user-card">
+            <div class="avatar-wrapper">
+                <img src="khairgeldin.jpg" alt="Хаиргельдин Данекер" onerror="this.src='https://via.placeholder.com/160/1e293b/38bdf8?text=Фото+Данекера'">
+            </div>
+            <h2>Хаиргельдин Данекер</h2>
+            <span class="group-tag">Группа ВТиПО-24Б</span>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label">Статус:</span>
+                    <span class="info-value">Учащийся</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Специальность:</span>
+                    <span class="info-value">ВТиПО</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Форма обучения:</span>
+                    <span class="info-value">Очная</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        © 2026 ВТиПО-24Б. Все права защищены.
+    </footer>
+
+    <script>
+        function switchUser(userId, element) {
+            // Скрываем все карточки
+            const cards = document.querySelectorAll('.user-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            // Убираем активный класс у всех кнопок
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Показываем нужную карточку и активируем кнопку
+            document.getElementById(userId).classList.add('active');
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
