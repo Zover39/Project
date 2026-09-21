@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DOM: Задания 1–4</title>
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --card-bg: #ffffff;
+    --text: #1f2430;
+    --muted: #6b7280;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --border: #e2e4ea;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --success: #16a34a;
+    --code-bg: #f1f2f7;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161d;
+      --card-bg: #1c1f29;
+      --text: #eef0f5;
+      --muted: #9aa0ad;
+      --accent: #818cf8;
+      --accent-hover: #6366f1;
+      --border: #2c2f3a;
+      --code-bg: #10121a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161d;
+    --card-bg: #1c1f29;
+    --text: #eef0f5;
+    --muted: #9aa0ad;
+    --accent: #818cf8;
+    --accent-hover: #6366f1;
+    --border: #2c2f3a;
+    --code-bg: #10121a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: background 0.25s ease, color 0.25s ease;
+    padding: 24px 16px 60px;
+  }
+
+  .wrap { max-width: 840px; margin: 0 auto; }
+
+  header.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  h1 { font-size: 1.5rem; margin: 0; }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text);
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .theme-toggle:hover { background: var(--code-bg); }
+  .theme-toggle .icon { font-size: 1.1rem; }
+
+  .switch {
+    position: relative;
+    width: 42px;
+    height: 24px;
+    background: var(--border);
+    border-radius: 999px;
+    transition: background 0.2s;
+  }
+  .switch::after {
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  :root[data-theme="dark"] .switch { background: var(--accent); }
+  :root[data-theme="dark"] .switch::after { transform: translateX(18px); }
+
+  section.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 22px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  section.card h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  section.card h2 .num {
+    background: var(--accent);
+    color: #fff;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .desc { color: var(--muted); font-size: 0.9rem; margin: -4px 0 14px; }
+
+  .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button:hover { background: var(--accent-hover); }
+  button.danger { background: var(--danger); }
+  button.danger:hover { background: var(--danger-hover); }
+  button.ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  button.ghost:hover { background: var(--code-bg); }
+
+  input[type="number"], input[type="text"] {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+    color: var(--text);
+    font-size: 0.88rem;
+    width: 80px;
+  }
+
+  .box {
+    background: var(--code-bg);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 8px;
+  }
+
+  #target-element { font-weight: 600; }
+  .new-div {
+    background: #eef2ff;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    display: inline-block;
+  }
+  :root[data-theme="dark"] .new-div { background: #262a3d; }
+
+  .old-element {
+    background: #fee2e2;
+    color: var(--danger);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  #clickable-paragraph {
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color 0.15s, font-size 0.15s;
+  }
+  #clickable-paragraph:hover { text-decoration: underline dotted; }
+
+  #classy-element {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    display: inline-block;
+  }
+  #classy-element.active {
+    background: #dcfce7;
+    border-color: var(--success);
+    color: #166534;
+  }
+  :root[data-theme="dark"] #classy-element.active { background: #14351f; color: #86efac; }
+
+  #class-list-output {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  table#generated-table {
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  table#generated-table td {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    transition: background 0.1s;
+  }
+  table#generated-table td:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  .color-palette { display: flex; gap: 8px; margin: 10px 0; }
+  .swatch {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .swatch.selected { border-color: var(--text); }
+
+  #cell-count-result { margin-top: 10px; font-weight: 600; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page-header">
+    <h1>DOM: практические задания</h1>
+    <div class="theme-toggle" id="theme-toggle" role="button" aria-label="Переключить тему">
+      <span class="icon" id="theme-icon">🌞</span>
+      <span id="theme-label">Светлая тема</span>
+      <span class="switch"></span>
+    </div>
+  </header>
+
+  <!-- ===================== TASK 1 ===================== -->
+  <section class="card">
+    <h2><span class="num">1</span>Основные операции с DOM</h2>
+    <p class="desc">Поиск по ID, создание/удаление элементов, обработчик клика.</p>
+
+    <div class="row">
+      <div id="target-element">Исходный текст элемента</div>
+      <button id="btn-change-text">Изменить текст на "Привет, мир!"</button>
+    </div>
+
+    <div class="row">
+      <button id="btn-add-div">Добавить &lt;div class="new-div"&gt; в конец body</button>
+    </div>
+
+    <div class="row">
+      <div class="old-element" id="old-element-demo">Я элемент с классом old-element</div>
+      <button class="danger" id="btn-delete-old">Удалить .old-element</button>
+    </div>
+
+    <div class="box">
+      <p id="clickable-paragraph">Это изменяемый абзац. Кликните по мне несколько раз.</p>
+    </div>
+  </section>
+
+  <!-- ===================== TASK 2 ===================== -->
+  <section class="card">
+    <h2><span class="num">2</span>Управление классами</h2>
+    <p class="desc">Переключение класса active и вывод списка классов элемента.</p>
+
+    <div class="row">
+      <div id="classy-element" class="demo-box">Элемент с классами</div>
+      <button id="btn-toggle-active">Переключить класс "active"</button>
+      <button class="ghost" id="btn-list-classes">Показать классы</button>
+    </div>
+    <p id="class-list-output">Список классов появится здесь и в консоли (F12).</p>
+  </section>
+
+  <!-- ===================== TASK 3 ===================== -->
+  <section class="card">
+    <h2><span class="num">3</span>Генератор таблицы</h2>
+    <p class="desc">Задайте размер, кликайте по ячейкам, чтобы красить их выбранным цветом, затем посчитайте ячейки нужного цвета.</p>
+
+    <div class="row">
+      <label>Строки: <input type="number" id="rows-input" min="1" max="20" value="4"></label>
+      <label>Столбцы: <input type="number" id="cols-input" min="1" max="20" value="5"></label>
+      <button id="btn-generate-table">Создать таблицу</button>
+    </div>
+
+    <div id="table-container"></div>
+
+    <div class="row" style="margin-top:14px;">
+      <span>Цвет для клика:</span>
+      <div class="color-palette" id="color-palette"></div>
+    </div>
+
+    <div class="row">
+      <button class="ghost" id="btn-count-color">Подсчитать ячейки выбранного цвета</button>
+    </div>
+    <div id="cell-count-result"></div>
+  </section>
+
+  <!-- ===================== TASK 4 ===================== -->
+  <section class="card">
+    <h2><span class="num">4</span>Тёмная тема</h2>
+    <p class="desc">Переключатель темы находится в правом верхнем углу страницы — он затрагивает всю страницу целиком (это и есть демонстрация задания 4).</p>
+    <div class="box">
+      Текущая тема: <strong id="current-theme-label">светлая</strong>. Настройка сохраняется в переменной JS на время сессии.
+    </div>
+  </section>
+
+  <footer>Откройте консоль разработчика (F12), чтобы увидеть дополнительные логи.</footer>
+</div>
+
+<script>
+/* ===================== TASK 1 ===================== */
+
+// 1. Найти элемент по ID и изменить текст
+document.getElementById('btn-change-text').addEventListener('click', () => {
+  const el = document.getElementById('target-element');
+  el.textContent = 'Привет, мир!';
+});
+
+// 2. Создать новый <div class="new-div"> и добавить в конец body
+document.getElementById('btn-add-div').addEventListener('click', () => {
+  const newDiv = document.createElement('div');
+  newDiv.className = 'new-div';
+  newDiv.textContent = 'Я новый элемент';
+  document.body.appendChild(newDiv);
+});
+
+// 3. Удалить элемент с классом old-element
+document.getElementById('btn-delete-old').addEventListener('click', () => {
+  const el = document.querySelector('.old-element');
+  if (el) {
+    el.remove();
+  } else {
+    alert('Элемент с классом .old-element уже удалён.');
+  }
+});
+
+// 4 и 5. Создать <p> с текстом, при клике менять цвет и размер шрифта
+const paragraph = document.getElementById('clickable-paragraph');
+const paragraphColors = ['#4f46e5', '#dc2626', '#16a34a', '#d97706', '#0891b2'];
+let clickCount = 0;
+paragraph.addEventListener('click', () => {
+  clickCount++;
+  const color = paragraphColors[clickCount % paragraphColors.length];
+  const size = 16 + (clickCount % 5) * 4; // от 16 до 32px
+  paragraph.style.color = color;
+  paragraph.style.fontSize = size + 'px';
+});
+
+/* ===================== TASK 2 ===================== */
+
+const classyElement = document.getElementById('classy-element');
+
+document.getElementById('btn-toggle-active').addEventListener('click', () => {
+  // classList.toggle сам добавляет класс, если его нет, и удаляет, если есть
+  classyElement.classList.toggle('active');
+});
+
+document.getElementById('btn-list-classes').addEventListener('click', () => {
+  const classes = Array.from(classyElement.classList);
+  console.log('Классы элемента:', classes);
+  document.getElementById('class-list-output').textContent =
+    classes.length ? 'Классы: ' + classes.join(', ') : 'У элемента нет классов.';
+});
+
+/* ===================== TASK 3 ===================== */
+
+let selectedColor = '#4f46e5';
+const paletteColors = ['#4f46e5', '#dc2626', '#16a34a', '#d97706', '#0891b2', '#e5e7eb'];
+
+function buildPalette() {
+  const palette = document.getElementById('color-palette');
+  palette.innerHTML = '';
+  paletteColors.forEach((color, i) => {
+    const sw = document.createElement('div');
+    sw.className = 'swatch' + (color === selectedColor ? ' selected' : '');
+    sw.style.background = color;
+    sw.addEventListener('click', () => {
+      selectedColor = color;
+      buildPalette();
+    });
+    palette.appendChild(sw);
+  });
+}
+buildPalette();
+
+function generateTable(rows, cols) {
+  const container = document.getElementById('table-container');
+  container.innerHTML = '';
+  const table = document.createElement('table');
+  table.id = 'generated-table';
+
+  for (let r = 0; r < rows; r++) {
+    const tr = document.createElement('tr');
+    for (let c = 0; c < cols; c++) {
+      const td = document.createElement('td');
+      td.dataset.color = ''; // текущий цвет ячейки
+      td.addEventListener('click', () => {
+        td.style.backgroundColor = selectedColor;
+        td.dataset.color = selectedColor;
+      });
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  container.appendChild(table);
+}
+
+document.getElementById('btn-generate-table').addEventListener('click', () => {
+  const rows = Math.max(1, Math.min(20, parseInt(document.getElementById('rows-input').value) || 1));
+  const cols = Math.max(1, Math.min(20, parseInt(document.getElementById('cols-input').value) || 1));
+  generateTable(rows, cols);
+  document.getElementById('cell-count-result').textContent = '';
+});
+
+// генерируем таблицу по умолчанию при загрузке
+generateTable(4, 5);
+
+function countCellsByColor(hexColor) {
+  const cells = document.querySelectorAll('#generated-table td');
+  let count = 0;
+  cells.forEach(cell => {
+    if (cell.dataset.color === hexColor) count++;
+  });
+  return count;
+}
+
+document.getElementById('btn-count-color').addEventListener('click', () => {
+  const count = countCellsByColor(selectedColor);
+  document.getElementById('cell-count-result').textContent =
+    `Ячеек выбранного цвета (${selectedColor}): ${count}`;
+});
+
+/* ===================== TASK 4 ===================== */
+
+const root = document.documentElement;
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const themeLabel = document.getElementById('theme-label');
+const currentThemeLabel = document.getElementById('current-theme-label');
+
+function prefersDark() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+let isDark = prefersDark();
+applyTheme();
+
+function applyTheme() {
+  root.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  themeIcon.textContent = isDark ? '🌙' : '🌞';
+  themeLabel.textContent = isDark ? 'Тёмная тема' : 'Светлая тема';
+  currentThemeLabel.textContent = isDark ? 'тёмная' : 'светлая';
+}
+
+themeToggle.addEventListener('click', () => {
+  isDark = !isDark;
+  applyTheme();
+});
+</script>
+</body>
+</html>
