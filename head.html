@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Практикум DOM — Задания</title>
+  <style>
+    /* Переменные для Светлой и Тёмной темы (Task 4) */
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-color: #212529;
+      --border-color: #dee2e6;
+      --primary-color: #0d6efd;
+      --primary-hover: #0b5ed7;
+      --accent-color: #e74c3c;
+      --table-cell-bg: #ffffff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --nav-bg: #ffffff;
+      --tab-active-bg: #0d6efd;
+      --tab-active-text: #ffffff;
+    }
+
+    body.dark-mode {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --text-color: #e0e0e0;
+      --border-color: #333333;
+      --primary-color: #3d8bfd;
+      --primary-hover: #0b5ed7;
+      --accent-color: #ff6b6b;
+      --table-cell-bg: #2a2a2a;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      --nav-bg: #1e1e1e;
+      --tab-active-bg: #3d8bfd;
+      --tab-active-text: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
+
+    /* Шапка сайта */
+    header {
+      background-color: var(--nav-bg);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 15px 20px 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: var(--primary-color);
+    }
+
+    /* Кнопка смены темы (Task 4) */
+    .theme-toggle-btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      transition: all 0.2s;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    /* Вкладки сверху */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+      color: var(--primary-color);
+    }
+
+    .tab-btn.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+      background-color: rgba(13, 110, 253, 0.08);
+    }
+
+    /* Контейнер для содержимого вкладок */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Общие стили карточек заданий */
+    .task-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      font-size: 1.25rem;
+    }
+
+    button.action-btn {
+      padding: 9px 16px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    button.action-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Стили для Задания 1 */
+    .new-div {
+      padding: 12px;
+      background-color: rgba(13, 110, 253, 0.1);
+      border: 1px dashed var(--primary-color);
+      border-radius: 6px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .clickable-p {
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      display: inline-block;
+      user-select: none;
+      background-color: rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Стили для Задания 2 */
+    .target-element {
+      padding: 15px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      margin: 15px 0;
+      transition: all 0.3s ease;
+    }
+
+    .target-element.active {
+      border-color: #2ecc71;
+      background-color: rgba(46, 204, 113, 0.15);
+      font-weight: bold;
+    }
+
+    /* Стили для Задания 3 (Таблица) */
+    .table-controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .table-controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .table-controls input, .table-controls select {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    table {
+      border-collapse: collapse;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    td {
+      width: 45px;
+      height: 45px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: var(--table-cell-bg);
+      transition: background-color 0.2s;
+    }
+
+    .count-result {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Навигация и переключение вкладок -->
+  <header>
+    <div class="header-content">
+      <div class="top-bar">
+        <h1>Практикум DOM</h1>
+        <!-- Task 4: Переключатель темной темы -->
+        <button id="themeToggle" class="theme-toggle-btn">🌙 Тёмная тема</button>
+      </div>
+
+      <ul class="tabs-nav">
+        <li><button class="tab-btn active" data-tab="tab1">Задание 1: DOM</button></li>
+        <li><button class="tab-btn" data-tab="tab2">Задание 2: Классы</button></li>
+        <li><button class="tab-btn" data-tab="tab3">Задание 3: Таблица</button></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Вкладка 1 -->
+    <section id="tab1" class="tab-content active">
+      <div class="task-card">
+        <h2>Задание 1. Элементы DOM и события</h2>
+        
+        <p><strong>Измененный текст по ID:</strong></p>
+        <p id="element-to-change" style="font-size: 1.1rem; font-weight: 600;">Старый текст элемента по ID</p>
+        
+        <div class="old-element" style="color: var(--accent-color); margin: 10px 0;">
+          Этот элемент (old-element) должен быть удален скриптом.
+        </div>
+
+        <p><strong>Кликабельный абзац:</strong></p>
+        <div id="p-container"></div>
+      </div>
+    </section>
+
+    <!-- Вкладка 2 -->
+    <section id="tab2" class="tab-content">
+      <div class="task-card">
+        <h2>Задание 2. Управление классами элементов</h2>
+        <button id="toggleClassBtn" class="action-btn">Переключить класс active</button>
+        
+        <div id="targetBox" class="target-element default-class my-box">
+          Тестовый элемент для проверки переключения классов
+        </div>
+
+        <p id="classListOutput" style="font-size: 1.05rem; font-weight: bold;">Список классов: </p>
+      </div>
+    </section>
+
+    <!-- Вкладка 3 -->
+    <section id="tab3" class="tab-content">
+      <div class="task-card">
+        <h2>Задание 3. Генератор таблицы и подсчет ячеек</h2>
+        
+        <div class="table-controls">
+          <label>
+            Строк:
+            <input type="number" id="rowsInput" min="1" max="20" value="4">
+          </label>
+          <label>
+            Столбцов:
+            <input type="number" id="colsInput" min="1" max="20" value="4">
+          </label>
+          <button id="generateTableBtn" class="action-btn">Создать таблицу</button>
+        </div>
+
+        <div class="table-controls">
+          <label>
+            Цвет заливки при клике:
+            <select id="colorPicker">
+              <option value="#e74c3c">Красный</option>
+              <option value="#2ecc71">Зеленый</option>
+              <option value="#3498db">Синий</option>
+              <option value="#f1c40f">Желтый</option>
+            </select>
+          </label>
+          <button id="countColorBtn" class="action-btn">Подсчитать ячейки цвета</button>
+        </div>
+
+        <div id="tableContainer"></div>
+        <p id="colorCountResult" class="count-result"></p>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ==========================================
+    // ЛОГИКА ВАТАБОК (ТАБОВ)
+    // ==========================================
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-tab');
+
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+
+    // ==========================================
+    // TASK 1: Выполнение первого задания
+    // ==========================================
+
+    // 1. Поиск по ID и сменя текста
+    const targetElementById = document.getElementById('element-to-change');
+    if (targetElementById) {
+      targetElementById.textContent = "Привет, мир!";
+    }
+
+    // 2. Создание new-div и добавление в конец body
+    const newDiv = document.createElement('div');
+    newDiv.className = 'new-div';
+    newDiv.textContent = 'Я новый элемент';
+    document.body.appendChild(newDiv);
+
+    // 3. Удаление old-element
+    const oldElement = document.querySelector('.old-element');
+    if (oldElement) {
+      oldElement.remove();
+    }
+
+    // 4. Создание <p> "Это изменяемый абзац." и смена стилей при клике
+    const pContainer = document.getElementById('p-container');
+    const dynamicP = document.createElement('p');
+    dynamicP.textContent = 'Это изменяемый абзац.';
+    dynamicP.className = 'clickable-p';
+
+    let isStyled = false;
+    dynamicP.addEventListener('click', () => {
+      if (!isStyled) {
+        dynamicP.style.color = '#e74c3c';
+        dynamicP.style.fontSize = '22px';
+      } else {
+        dynamicP.style.color = '';
+        dynamicP.style.fontSize = '';
+      }
+      isStyled = !isStyled;
+    });
+
+    pContainer.appendChild(dynamicP);
+
+
+    // ==========================================
+    // TASK 2: Управление классами элементов
+    // ==========================================
+
+    const toggleClassBtn = document.getElementById('toggleClassBtn');
+    const targetBox = document.getElementById('targetBox');
+    const classListOutput = document.getElementById('classListOutput');
+
+    function updateClassDisplay() {
+      const classes = Array.from(targetBox.classList);
+      
+      // Вывод всех классов в консоль браузера (F12)
+      console.log('Список всех классов элемента:', classes);
+      
+      // Вывод в отдельный тег <p>
+      classListOutput.textContent = `Список всех классов: ${classes.join(', ')}`;
+    }
+
+    updateClassDisplay();
+
+    toggleClassBtn.addEventListener('click', () => {
+      targetBox.classList.toggle('active');
+      updateClassDisplay();
+    });
+
+
+    // ==========================================
+    // TASK 3: Генератор таблицы
+    // ==========================================
+
+    const generateTableBtn = document.getElementById('generateTableBtn');
+    const tableContainer = document.getElementById('tableContainer');
+    const colorPicker = document.getElementById('colorPicker');
+    const countColorBtn = document.getElementById('countColorBtn');
+    const colorCountResult = document.getElementById('colorCountResult');
+
+    function generateTable(rows, cols) {
+      tableContainer.innerHTML = '';
+      colorCountResult.textContent = '';
+
+      const table = document.createElement('table');
+
+      for (let i = 0; i < rows; i++) {
+        const tr = document.createElement('tr');
+        for (let j = 0; j < cols; j++) {
+          const td = document.createElement('td');
+          
+          // Клик по ячейке сменяет цвет
+          td.addEventListener('click', function() {
+            const selectedColor = colorPicker.value;
+            if (this.dataset.color === selectedColor) {
+              this.style.backgroundColor = '';
+              delete this.dataset.color;
+            } else {
+              this.style.backgroundColor = selectedColor;
+              this.dataset.color = selectedColor;
+            }
+          });
+
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+
+      tableContainer.appendChild(table);
+    }
+
+    function countCellsByColor(color) {
+      const cells = tableContainer.querySelectorAll('td');
+      let count = 0;
+      cells.forEach(cell => {
+        if (cell.dataset.color === color) {
+          count++;
+        }
+      });
+      return count;
+    }
+
+    generateTableBtn.addEventListener('click', () => {
+      const rows = parseInt(document.getElementById('rowsInput').value) || 1;
+      const cols = parseInt(document.getElementById('colsInput').value) || 1;
+      generateTable(rows, cols);
+    });
+
+    countColorBtn.addEventListener('click', () => {
+      const selectedColor = colorPicker.value;
+      const count = countCellsByColor(selectedColor);
+      const colorName = colorPicker.options[colorPicker.selectedIndex].text;
+      colorCountResult.textContent = `Количество ячеек цвета "${colorName}": ${count}`;
+    });
+
+    // Создаем начальную таблицу 4x4
+    generateTable(4, 4);
+
+
+    // ==========================================
+    // TASK 4: Переключение темы
+    // ==========================================
+
+    const themeToggleBtn = document.getElementById('themeToggle');
+
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggleBtn.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+    });
+  </script>
+</body>
+</html>
