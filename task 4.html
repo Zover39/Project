@@ -1,0 +1,10 @@
+const themeToggleBtn = document.getElementById('themeToggle');
+
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeToggleBtn.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+    });
+  </script>
+</body>
+</html>
