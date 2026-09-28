@@ -1,0 +1,23 @@
+// TASK 2: Управление классами элементов
+    // ==========================================
+
+    const toggleClassBtn = document.getElementById('toggleClassBtn');
+    const targetBox = document.getElementById('targetBox');
+    const classListOutput = document.getElementById('classListOutput');
+
+    function updateClassDisplay() {
+      const classes = Array.from(targetBox.classList);
+      
+      // Вывод всех классов в консоль браузера (F12)
+      console.log('Список всех классов элемента:', classes);
+      
+      // Вывод в отдельный тег <p>
+      classListOutput.textContent = `Список всех классов: ${classes.join(', ')}`;
+    }
+
+    updateClassDisplay();
+
+    toggleClassBtn.addEventListener('click', () => {
+      targetBox.classList.toggle('active');
+      updateClassDisplay();
+    });
