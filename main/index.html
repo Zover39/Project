@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK MARKET // CYBERWARE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-layout">
+        <header>
+            <div class="logo">
+                <span class="glitch">NET_RUNNER</span>
+                <span class="badge">LIVE_MARKET</span>
+            </div>
+            <p class="tagline">Контрабанда кибернетики & железа</p>
+        </header>
+
+        <!-- Форма добавления товара -->
+        <section class="add-card">
+            <h2>+ Добавить имплант</h2>
+            <div class="form-grid">
+                <input type="text" id="itemName" placeholder="Название (напр. Neural Link v2)">
+                <input type="number" id="itemPrice" placeholder="Цена ($)">
+                <input type="text" id="itemCategory" placeholder="Категория (напр. Optics)">
+                <button id="createBtn">Внести в базу</button>
+            </div>
+        </section>
+
+        <!-- Каталог товаров -->
+        <section class="catalog-section">
+            <div class="section-header">
+                <h2>Доступные импланты</h2>
+                <span id="counter" class="counter">0 предметов</span>
+            </div>
+            
+            <div id="productGrid" class="grid-container">
+                <!-- Сюда подгружаются карточки -->
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
